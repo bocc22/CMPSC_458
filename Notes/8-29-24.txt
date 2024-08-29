@@ -1,0 +1,42 @@
+COMPUTER GRAPHICS NOTES
+
+||REVIEW LECTURE||
+
+--MATRICES--
+Matrix Multiplication is Associative
+
+
+--FUNCTIONS-- 
+function - a mapping of inputs and outputs such that there is only 1 output for any set of inputs
+inverse function - a function using the outputs as inputs and inputs as outputs (not always a function)
+one to one (injective) function - a function where each input maps to exactly one output
+onto function (surjective) - f^-1(b) = a for each point in B and some in A
+bijective function - a function that is injective and surjective
+
+
+--VECTORS AND POINTS--
+point - Fixed location
+vector - a magnitude and direction with no fixed starting point
+unit vector - a vector with magnitude 1
+normalizing a vector - divide vector by magnitude
+dot product - projection of one vector onto another. found by the multiplication of the magnitude of each vector and the cosine of the angle between them
+cross product - perpindicular to both input vectors. found by the multiplication of the magnitude of each vector and the sine of the angle between them in a direction perpindicular to the original vectors
+
+
+--COORDINATE SYSTEMS--
+key components - origin and basis vectors
+basis vectors - unit vectors that define the directions of the coordinate system
+orthonormal basis vectors - basis vectors are pairwise orthogonal (perpindicular)
+Cartesian (Rectangular) - 1,2,3D  defined by distance from each axis (x,y,z)
+Polar - 2D defined by distance from origin (r) and angle from basis vector (theta)
+Cylindrical - 3D, defined by distance from center axis (r), angle from basis vector (theta), and distance from z-axis (z)
+Spherical - 3D, defined by distance from origin (r), angle from first basis vector (theta), and angle from second basis vector(phi)
+
+
+--TRANSFORMATIONS--
+transformation - a mapping from one space onto another or onto itself (moving an object in a specific space)
+animation - varied transformations over time
+types of actions - translation, rotation, reflection, scaling, shearing
+types of objects - points, vectors, coordinates
+rigid transformation - any two points on the object are the same distance from each other before and after the transformation
+
