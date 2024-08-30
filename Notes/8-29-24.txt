@@ -4,6 +4,14 @@ COMPUTER GRAPHICS NOTES
 
 --MATRICES--
 Matrix Multiplication is Associative
+Matrix Size is num of rows times num of columns
+A Matrix Inverse can be multiplied with the original to create an Identity Matrix
+Transposing a Matrix is done by switching the columns to rows and vice versa
+A Matrix Rank is the number of linearly independent rows
+
+--POLYNOMIALS--
+A polynomial is an expressin consisting of scalars and variables
+A cubic polynomial is a polynomial with a cubic variable as it's highest power variable
 
 
 --FUNCTIONS-- 
@@ -19,8 +27,15 @@ point - Fixed location
 vector - a magnitude and direction with no fixed starting point
 unit vector - a vector with magnitude 1
 normalizing a vector - divide vector by magnitude
+average of N vectors - the sum of each vector divided by N
+angle between vectors - sec(A * B/|A||B|)
 dot product - projection of one vector onto another. found by the multiplication of the magnitude of each vector and the cosine of the angle between them
 cross product - perpindicular to both input vectors. found by the multiplication of the magnitude of each vector and the sine of the angle between them in a direction perpindicular to the original vectors
+normal vector of a plane - A vector perpindicular to each point on the plane
+implicit form (line/plane)- a line or plane defined by a system of equations
+parametric form (line/plane)- a line or plane defined by a set of points in a vector equation
+implicit form (circle) - (x_1 - x)^2 + (y_1 - y)^2 = r^2
+parametric form (circle) - x = x_0 + r*cos(t), y = y_0 + r*sin(t)
 
 
 --COORDINATE SYSTEMS--
@@ -30,7 +45,20 @@ orthonormal basis vectors - basis vectors are pairwise orthogonal (perpindicular
 Cartesian (Rectangular) - 1,2,3D  defined by distance from each axis (x,y,z)
 Polar - 2D defined by distance from origin (r) and angle from basis vector (theta)
 Cylindrical - 3D, defined by distance from center axis (r), angle from basis vector (theta), and distance from z-axis (z)
-Spherical - 3D, defined by distance from origin (r), angle from first basis vector (theta), and angle from second basis vector(phi)
+Spherical - 3D, defined by distance from origin (r), angle from first basis vector (theta), and angle from second basis vector(phi)\
+
+
+--DATA STRUCTURES--
+binary tree - a tree where each node has only 0, 1, or 2 children
+depth of a tree - the number of nodes passed through from the top to bottom of the tree
+traversing a tree - Left, Root, Right (inorder) ; Root, Left, Right (preorder) ; Left, Right, Root (postorder)
+time complexity of a binary tree traversal - O(N)
+
+
+--LINE OPERATIONS--
+intersection of two lines - set functions equal to one another
+intersection of a line and circle - convert circle to cartesian or line to circular coordinates and set variables equal to each other to solve
+intersetcion of a line and plane in 3d - convert to parametric form and solve
 
 
 --TRANSFORMATIONS--
@@ -39,4 +67,9 @@ animation - varied transformations over time
 types of actions - translation, rotation, reflection, scaling, shearing
 types of objects - points, vectors, coordinates
 rigid transformation - any two points on the object are the same distance from each other before and after the transformation
+
+
+--OTHER--
+random number generator - takes a seed and uses it to produce a pseudo-random number
+compute velocity and acceleration under gravity - add together a gravity and acceleration vector, then use the sum to compute velocity
 
