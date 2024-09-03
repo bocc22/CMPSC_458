@@ -1,0 +1,30 @@
+COMPUTER GRAPHICS NOTES
+
+||TRANSFORMATIONS 1 LECTURE||
+
+
+--TRANSFORMATION DEFINITIONS--
+Transformation - A mapping from one space to another or onto itself;Moving an object in a specific space
+Modeling Transformations - Builds complex models by position and re-shaping simple components
+Viewing transformations - Placing a virtual camera in the world; Specifying transformation from object to world and from world to camera coordinates
+Ingredients - Action and Object
+Actions - Translation, Rotation, Reflecting, Scale, Shear
+Objects - Points, Vectors, Planes, Coordinates
+Rigid Transformation (Distance Preserving Mapping, Isometry)- The distance between any two points on an object remain the same before and after the object is transformed
+	Examples - Translation, Rotation, Reflection
+Similarity Transformation - Rigid Transformations + Uniform Scalings
+Affine Transformation - Similarity Transformations + Shears + Non-Uniform Scalings
+Projective Transformation - Affine Transformations + Homography;An isomorphism of projective spaces; A bijection that maps lines to lines
+Invariances - 
+	Rigid: Distance between points
+	Similarity: Angle between lines
+	Affine: Parallelism between lines
+	Projection: Curve of lines
+
+
+--TRANSFORMATIONS REPRESENTATIONS--
+Linear Functions - For all vectors A and B, and all scalars k, F(A+B) = F(A) + F(B) and F(kA) = k(F(A)).
+	Examples - Rotations, Reflection, Scale, Shearing
+NxN Matrix - Can be used to represent any linear function transformation (N=Num of Dimensions)
+(N+!)x(N+!) Matrix - Used to represent transformations (N=Num of Dimensions)
+Review - Determinant, Inverse, , Orthogonal, Orthonormal
