@@ -1,0 +1,7 @@
+COMPUTER GRAPHICS NOTES
+
+||TRANSFORMATIONS 2 LECTURE||
+
+
+--COMPUTING TRANFORMATIONS--
+Matrices Order- "First" Transformation goes on the right
