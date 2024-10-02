@@ -1,15 +1,15 @@
 /*
 	Project 1 Submission for CMPSC458
-    Name: Joe Smith
-	psu id: xyz123
+    Name: Brock Handley
+	psu id: bdh5437
 */
 
 #include <Project1.hpp>
 
 // globals 
 	// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 2560;
+const unsigned int SCR_HEIGHT = 1440;
 
 	// camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -191,6 +191,7 @@ int main(int argc, char **argv)
 	unsigned int bottom_texture = loadTexture("../Project_1/Media/skybox/bottom.jpg");
 	unsigned int left_texture = loadTexture("../Project_1/Media/skybox/left.jpg");
 	unsigned int right_texture = loadTexture("../Project_1/Media/skybox/right.jpg");
+	unsigned int wall_texture = loadTexture("../Project_1/Media/textures/wall.jpg");
 
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
@@ -219,6 +220,10 @@ int main(int argc, char **argv)
 	float xTranslate = 0.0f;
 	float yTranslate = 0.0f;
 	float zTranslate = 0.0f;
+
+	float xShear = 0.0f;
+	float yShear = 0.0f;
+	float zShear = 0.0f;
 
 	// render loop
 	// -----------
@@ -259,72 +264,99 @@ int main(int argc, char **argv)
 		glm::mat4 view = camera.GetViewMatrix();
 		ourShader.setMat4("view", view);
 
+
+		//USER INPUT
+
+		//Scaling
 		if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
 			if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
-				xScale += deltaTime;
+				xScale += deltaTime * 5;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-				xScale -= deltaTime;
+				xScale -= deltaTime * 5;
 			}
-			xRot += xRotRate;
 			if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-				yScale += deltaTime;
+				yScale += deltaTime * 5;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-				yScale -= deltaTime;
+				yScale -= deltaTime * 5;
 			}
-			yRot += yRotRate;
 			if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-				zScale += deltaTime;
+				zScale += deltaTime * 5;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-				zScale -= deltaTime;
+				zScale -= deltaTime * 5;
+			}
+			if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+				xRotRate = 0;
+				yRotRate = 0;
+				zRotRate = 0;
+
+				xTranslate = 0.0f;
+				yTranslate = 0.0f;
+				zTranslate = 0.0f;
+
+				xShear = 0.0f;
+				yShear = 0.0f;
+				zShear = 0.0f;
 			}
 		}
+		//Translating
 		else if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS) {
 			if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
-				xTranslate += deltaTime;
+				xTranslate += deltaTime * 5;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-				xTranslate -= deltaTime;
+				xTranslate -= deltaTime * 5;
+			}
+			if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+				yTranslate += deltaTime * 5;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+				yTranslate -= deltaTime * 5;
+			}
+			if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+				zTranslate += deltaTime * 5;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+				zTranslate -= deltaTime * 5;
+			}
+			if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+				xRotRate = 0;
+				yRotRate = 0;
+				zRotRate = 0;
+
+				xScale = 1.0f;
+				yScale = 1.0f;
+				zScale = 1.0f;
+
+				xShear = 0.0f;
+				yShear = 0.0f;
+				zShear = 0.0f;
+			}
+		}
+		//Shearing
+		else if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS) {
+			if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
+				xShear += deltaTime * 5;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+				xShear -= deltaTime * 5;
 			}
 			xRot += xRotRate;
 			if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-				yTranslate += deltaTime;
+				yShear += deltaTime * 5;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-				yTranslate -= deltaTime;
+				yShear -= deltaTime * 5;
 			}
 			yRot += yRotRate;
 			if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-				zTranslate += deltaTime;
+				zShear += deltaTime * 5;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-				zTranslate -= deltaTime;
+				zShear -= deltaTime * 5;
 			}
-		}
-		else {
-			if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
-				xRotRate += 0.1f * deltaTime;
-			}
-			else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-				xRotRate -= 0.1f * deltaTime;
-			}
-			
-			if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-				yRotRate += 0.1f * deltaTime;
-			}
-			else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-				yRotRate -= 0.1f * deltaTime;
-			}
-			
-			if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-				zRotRate += 0.1f * deltaTime;
-			}
-			else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-				zRotRate -= 0.1f * deltaTime;
-			}
-			
 			if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
 				xRotRate = 0;
 				yRotRate = 0;
@@ -339,9 +371,64 @@ int main(int argc, char **argv)
 				zTranslate = 0.0f;
 			}
 		}
+		//Rotating
+		else {
+			if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
+				xRotRate += 0.1f * deltaTime * 5;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+				xRotRate -= 0.1f * deltaTime * 5;
+			}
+			
+			if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+				yRotRate += 0.1f * deltaTime * 5;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+				yRotRate -= 0.1f * deltaTime * 5;
+			}
+			
+			if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+				zRotRate += 0.1f * deltaTime * 5;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+				zRotRate -= 0.1f * deltaTime * 5;
+			}
+			
+			if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+				xRotRate = 0;
+				yRotRate = 0;
+				zRotRate = 0;
+
+				xScale = 1.0f;
+				yScale = 1.0f;
+				zScale = 1.0f;
+
+				xTranslate = 0.0f;
+				yTranslate = 0.0f;
+				zTranslate = 0.0f;
+
+				xShear = 0.0f;
+				yShear = 0.0f;
+				zShear = 0.0f;
+			}
+		}
+		if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+			xRot = 0;
+			yRot = 0;
+			zRot = 0;
+
+			xRotRate = 0;
+			yRotRate = 0;
+			zRotRate = 0;
+		}
 		xRot += xRotRate;
 		yRot += yRotRate;
 		zRot += zRotRate;
+
+		glm::mat4 shearMatrix = glm::mat4(1.0f, yShear, zShear, 0.0f,
+											xShear, 1.0f, zShear, 0.0f,
+											xShear, yShear, 1.0f, 0.0f,
+											0.0f, 0.0f, 0.0f, 1.0f);
 		// render boxes
 		glBindVertexArray(VAO);
 		for (unsigned int i = 0; i < 10; i++)
@@ -351,16 +438,22 @@ int main(int argc, char **argv)
 			// Translate the model to the cube starting position
 			model = glm::translate(model, cubePositions[i]);
 
+			// Translate the model by user input
 			model = glm::translate(model, glm::vec3(xTranslate, yTranslate, zTranslate));
 
 			// Rotate the cube by an angle
 			float angle = 20.0f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.0f));
 
+			// Rotate the model by user input
 			model = glm::rotate(model, glm::radians(xRot), glm::vec3(1.0f, 0.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(yRot), glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(zRot), glm::vec3(0.0f, 0.0f, 1.0f));
 
+			//Shears the model by user input
+			model = model * shearMatrix;
+
+			//Scale the model by user input
 			model = glm::scale(model, glm::vec3(xScale, yScale, zScale));
 			
 			// Set model in shader
@@ -450,8 +543,9 @@ int main(int argc, char **argv)
 		ourShader.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
+
 		// Draw the heightmap (defined in heightmap.hpp)  Similar to above but you have to write it.
-		//heightmap.Draw(ourShader, box_texture);
+		heightmap.Draw(ourShader, wall_texture);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
