@@ -170,6 +170,8 @@ int main(int argc, char **argv)
 	glm::vec3 left = glm::normalize(glm::cross(up, dir));
 
 	glm::vec3 currentColor;
+	float height = 2 * sin(fovy / 2);
+	float width = height / SCR_HEIGHT * SCR_WIDTH;
 	// render loop
 	// -----------
     bool running = true;
@@ -190,13 +192,17 @@ int main(int argc, char **argv)
 					glm::vec3 currentColor;
 					// Some code that just makes a green/red pattern
 					currentColor = glm::vec3(x % 255 / 255.0, y % 255 / 255.0, 0.0f);
-
+					glm::vec3 topLeft = lookAt + float(height / 2) * up + float(width / 2) * left;
+					float xOffset = (float(x) + 0.5) * width / SCR_WIDTH;
+					float yOffset = (float(y) + 0.5) * height / SCR_HEIGHT;
+					glm::vec3 currPos = topLeft - xOffset * left - yOffset * up;
+					glm::vec3 currDir = glm::normalize(currPos - eye);
 					// You will have to write this function in the scene class, using recursive raytracing to determine color
 					//   Right here, you will need to determine the current direction "currentDir" based off what you know about projective geometry (Section 4.3)
 					//     You will need to compute the direction from the eye, to the place on the camera plane derived from the x and y coordinates and the lookat direction (Section 4.3.3) 
 					//     The eye is defined by the camera coordinates (above)
 					//   The ray is defined (using the line equation y=mx+b ... again) where m=the current direction and b= the eye. 
-					//currentColor = myScene->rayTrace(eye,currentDir,0);
+					currentColor = myScene->rayTrace(eye,currDir,0);
 
 					//Put the color into our image buffer.  
 					//  This first clamps the "currentColor" variable within a range of 0,1 which means min(max(x,0),1) 

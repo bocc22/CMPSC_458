@@ -16,11 +16,10 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
 	//for the intersection(s) of a line and a sphere, implement it here and
 	//return the minimum positive distance or 9999999 if none
 
-	float discriminant = pow(glm::dot(2.0f * dir, eye - center), 2) + 4.0f * glm::dot(dir, dir) * glm::dot(eye - center, eye - center);
-
+	float discriminant = pow(glm::dot(dir, eye - center), 2) - (glm::dot(dir, dir) * (glm::dot(eye - center, eye - center) - pow(radius / 7, 2)));
 	if (discriminant > 0) {
-		float t1 = (-(glm::dot(dir, eye - center)) + sqrt(pow(glm::dot(dir, eye - center), 2) - (glm::dot(dir, dir) * (glm::dot(eye - center, eye - center) * pow(radius, 2))))) / glm::dot(dir, dir);
-		float t2 = (-(glm::dot(dir, eye - center)) - sqrt(pow(glm::dot(dir, eye - center), 2) - (glm::dot(dir, dir) * (glm::dot(eye - center, eye - center) * pow(radius, 2))))) / glm::dot(dir, dir);
+		float t1 = (-1.0f * (glm::dot(dir, eye - center)) + sqrt(discriminant)) / glm::dot(dir, dir);
+		float t2 = (-1.0f * (glm::dot(dir, eye - center)) - sqrt(discriminant)) / glm::dot(dir, dir);
 		if (t1 > 0) {
 			if (t2 > 0 && t2 < t1) {
 				return t2;
@@ -34,7 +33,7 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
 				return t2;
 			}
 		}
-	}
+	}	
 	return 9999999;
 }
 

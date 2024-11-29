@@ -23,7 +23,6 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir)
 	//for the intersection(s) of a line and a plane, implement it here and
 	//return the minimum distance (if barycentric coordinates indicate it hit
 	//the triangle) otherwise 9999999
-
 	float a = point0.x - point1.x;
 	float b = point0.y - point1.y;
 	float c = point0.z - point1.z;
@@ -37,13 +36,14 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir)
 	float k = point0.y - eye.y;
 	float l = point0.z - eye.z;
 
-	float M = a * (e * i - h * f) + b * (g * f - d * i) + c * (d * h + e * g);
+	float M = a * (e * i - h * f) + b * (g * f - d * i) + c * (d * h - e * g);
 
 	float beta = (j * (e * i - h * f) + k * (g * f - d * i) + l * (d * h - e * g)) / M;
 	float gamma = (i * (a * k - j * b) + h * (j * c - a * l) + g * (b * l - k * c)) / M;
-	float t = -1 * ((f * (a * k - j * b) + e * (j * c - a * l) + d * (b * l * k * c)) / M);
-
-	if (beta > 0 && gamma > 0 && beta + gamma < 1) {
+	float t = -1 * ((f * (a * k - j * b) + e * (j * c - a * l) + d * (b * l - k * c)) / M);
+	
+	if (beta >= 0 && gamma >= 0 && beta + gamma <= 1) {
+		//std::cout << "Beta: " << beta << ", Gamma: " << gamma << ", T: " << t << std::endl;
 		return t;
 	}
 
@@ -68,6 +68,9 @@ glm::vec2 triangle::getTextureCoords(glm::vec3 eye, glm::vec3 dir)
 	//find alpha and beta (parametric distance along barycentric coordinates)
 	//use these in combination with the known texture surface location of the vertices
 	//to find the texture surface location of the point you are seeing
+	glm::vec3 betaUnitLength = point1 - point0;
+	glm::vec3 gammaUnitLength = point2 - point0;
+	glm::vec3 eyeToOrigin = eye - point0;
 
 	glm::vec3 coords;
 	return coords;

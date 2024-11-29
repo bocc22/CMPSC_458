@@ -22,7 +22,7 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	//if we saw nothing, return the background color of our scene
 	if (dist == 9999999)
 		return bgColor;
-
+	//std::cout << "Distance: " << dist << std::endl;
 	//get the material index and normal vector(at the point we saw) of the object we saw
 	int matIndex = myObjGroup->getClosest()->getMatIndex();
 	material * texture = &myMaterials.at(matIndex);
@@ -31,10 +31,11 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	//determine texture color
 	glm::vec3 textureColor;
 
-	if (!texture->image)
+	if (!texture->image) {
 		//this is multiplicative, rather than additive
 		//so if there is no texture, just use ones
 		textureColor = glm::vec3(1.0f);
+	}
 	else
 	{
 		//if there is a texture image, ask the object for the image coordinates (between 0 and 1)
@@ -45,10 +46,12 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 		int x = (int)(texture->width*coords.x);
 		int y = (int)(texture->height*coords.y);
 		textureColor = texture->data[x + y*texture->width];
+		std::cout << "Texture: (" << x << ", " << y << ") RBG: (" << textureColor.x << ", " << textureColor.y << ", " << textureColor.z << ")" << std::endl;
 	}
 
 	//add diffuse color times ambient light to our answer
-	
+	answer += ambLight * texture->diffuseCol;
+
 	//iterate through all lights
 
 	//if the light can see the surface point,
