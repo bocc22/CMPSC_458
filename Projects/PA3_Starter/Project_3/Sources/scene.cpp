@@ -22,6 +22,7 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	//if we saw nothing, return the background color of our scene
 	if (dist == 9999999)
 		return bgColor;
+	glm::vec3 fragPos = eye + dir * dist;
 	//std::cout << "Distance: " << dist << std::endl;
 	//get the material index and normal vector(at the point we saw) of the object we saw
 	int matIndex = myObjGroup->getClosest()->getMatIndex();
@@ -46,20 +47,33 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 		int x = (int)(texture->width*coords.x);
 		int y = (int)(texture->height*coords.y);
 		textureColor = texture->data[x + y*texture->width];
-		std::cout << "Texture: (" << x << ", " << y << ") RBG: (" << textureColor.x << ", " << textureColor.y << ", " << textureColor.z << ")" << std::endl;
+		//std::cout << "Texture: (" << x << ", " << y << ") RBG: (" << textureColor.x << ", " << textureColor.y << ", " << textureColor.z << ")" << std::endl;
 	}
 
 	//add diffuse color times ambient light to our answer
 	answer += ambLight * texture->diffuseCol;
 
+	glm::vec3 diffuse(0, 0, 0);
+	glm::vec3 spec(0, 0, 0);
 	//iterate through all lights
-
+	for (int i = 0; i < myLights.size(); i++) {
+		light light = myLights.at(i);
+		glm::vec3 light_dir = glm::normalize(fragPos - light.position);
+		float distFromLight = myObjGroup->testIntersections(light.position, light_dir);
+		float objDistFromLight = glm::length(fragPos - light.position);
+		if (distFromLight != 9999999 && abs(distFromLight - objDistFromLight) < 1) {
+			diffuse += light.color * std::max(0.0f, glm::dot(normal, -1.0f * light_dir));
+			glm::vec3 h = -1.0f * glm::normalize(dir + light_dir);
+			spec += light.color * pow(std::max(0.0f, glm::dot(h, normal)), 256.0f);
+		}
+	}
+	
 	//if the light can see the surface point,
 	//add its diffuse color to a total diffuse for the point (using our illumination model)
 	//use testIntersection to help decide this
 
 	//add the diffuse light times the accumulated diffuse light to our answer
-
+	answer += diffuse * texture->diffuseCol;
 	//put a limit on the depth of recursion
 	//if (recurseDepth<3)
 	//{
@@ -67,6 +81,31 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	//recusively raytrace from the surface point along the reflected view
 	//add the color seen times the reflective color
 
+	if (recurseDepth < 2) {
+		glm::vec3 refCol = texture->reflectiveCol;
+		if (refCol != glm::vec3(0, 0, 0)) {
+			glm::vec3 newDir = glm::normalize(glm::reflect(dir, normal));
+			glm::vec3 reflectedColor = rayTrace(fragPos, newDir, recurseDepth + 1);
+			//std::cout << reflectedColor.x << ", " << reflectedColor.y << ", " << reflectedColor.z << std::endl;
+			answer += reflectedColor * refCol;
+		}
+		float refInd = texture->refractionIndex;
+		glm::vec3 traCol = texture->transparentCol;
+		if (refInd > 0 && traCol != glm::vec3(0,0,0)) {
+
+			glm::vec3 adjNorm = (glm::dot(dir, normal) < 0) ? normal : -normal;
+			float ind = (glm::dot(dir, normal) < 0) ? refInd : 1.0f / refInd;
+			float dot = glm::dot(dir, adjNorm);
+
+			float k = 1 - pow(ind, 2) * (1 - pow(dot, 2));
+			glm::vec3 newDir;
+			if (k >= 0) {
+				newDir = ind * dir - (ind * dot + sqrt(k)) * adjNorm;
+				glm::vec3 refractedColor = rayTrace(fragPos, newDir, recurseDepth + 1);
+				answer += refractedColor * traCol;
+			}
+		}
+	}
 
 
 	//if going into material (dot prod of dir and normal is negative), bend toward normal
@@ -81,6 +120,7 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 
 	//multiply whatever color we have found by the texture color
 	answer *= textureColor;
+	answer += spec * texture->specularCol;
 	return answer;
 }
 

@@ -170,8 +170,8 @@ int main(int argc, char **argv)
 	glm::vec3 left = glm::normalize(glm::cross(up, dir));
 
 	glm::vec3 currentColor;
-	float height = 2 * sin(fovy / 2);
-	float width = height / SCR_HEIGHT * SCR_WIDTH;
+	float height = 2 * tan(fovy / 2);
+	float width = height * (1.0f * SCR_WIDTH / SCR_HEIGHT);
 	// render loop
 	// -----------
     bool running = true;
@@ -186,15 +186,17 @@ int main(int argc, char **argv)
 			for (int y = 0; y < SCR_HEIGHT; y++)
 			{
 				// This runs the following loop in parallel -- You can comment the next line out for debugging purposes 
-				#pragma omp parallel for schedule(dynamic)
+				//#pragma omp parallel for schedule(dynamic)
 				for (int x = 0; x < SCR_WIDTH; x++)
 				{
 					glm::vec3 currentColor;
 					// Some code that just makes a green/red pattern
 					currentColor = glm::vec3(x % 255 / 255.0, y % 255 / 255.0, 0.0f);
-					glm::vec3 topLeft = lookAt + float(height / 2) * up + float(width / 2) * left;
-					float xOffset = (float(x) + 0.5) * width / SCR_WIDTH;
-					float yOffset = (float(y) + 0.5) * height / SCR_HEIGHT;
+					glm::vec3 topLeft = dir + eye + float(height / 2) * up + float(width / 2) * left;
+					float pixelWidth = width / float(SCR_WIDTH);
+					float pixelHeight = height / float(SCR_HEIGHT);
+					float xOffset = (float(x) + 0.5) * pixelWidth;
+					float yOffset = (float(y) + 0.5) * pixelHeight;
 					glm::vec3 currPos = topLeft - xOffset * left - yOffset * up;
 					glm::vec3 currDir = glm::normalize(currPos - eye);
 					// You will have to write this function in the scene class, using recursive raytracing to determine color
